@@ -29,16 +29,16 @@ export default function TabOneScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    borderRadius: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-  },
-  price: {},
-  image: { width: "100%", aspectRatio: 1 },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 16,
+//     borderRadius: 20,
+//   },
+//   title: {
+//     fontSize: 20,
+//     fontWeight: "bold",
+//     color: "white",
+//   },
+//   price: {},
+//   image: { width: "100%", aspectRatio: 1 },
+// });
