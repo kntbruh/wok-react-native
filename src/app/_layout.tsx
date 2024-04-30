@@ -8,6 +8,9 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import CartProvider from "./providers/CartProvider";
+import { Provider } from "react-redux";
+import { store } from "@/redux_TK/store";
 
 import { useColorScheme } from "@/components/useColorScheme";
 
@@ -53,10 +56,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
+      <Provider store={store}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="Cart" options={{ presentation: "modal" }} />
+        </Stack>
+      </Provider>
     </ThemeProvider>
   );
 }

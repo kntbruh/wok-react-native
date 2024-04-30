@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, View } from "react-native";
+import { Alert, FlatList, StyleSheet, View, Text } from "react-native";
 import axios from "axios";
 import { WokItems } from "@/components/myComponents/WokItems";
+import { fetchWoks, selectWok } from "@/redux_TK/wokSlice";
+import { useAppDispatch } from "@/redux_TK/store";
+import { useSelector } from "react-redux";
 
 export default function TabOneScreen() {
-  const [items, setItems] = useState<any[]>([]);
+  const dispatch = useAppDispatch();
+  // const [items, setItems] = useState<any[]>([]);
+  const { items, status } = useSelector(selectWok);
 
   useEffect(() => {
-    axios
-      .get("https://655251e85c69a7790329e2f4.mockapi.io/wok-data")
-      .then(({ data }) => {
-        setItems(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        Alert.alert("Ошибка!", "Error!");
-      });
-  }, []);
+    dispatch(fetchWoks({}));
+  }, [dispatch]);
+
+  if (status === "loading") {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <FlatList
@@ -28,17 +29,3 @@ export default function TabOneScreen() {
     />
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 16,
-//     borderRadius: 20,
-//   },
-//   title: {
-//     fontSize: 20,
-//     fontWeight: "bold",
-//     color: "white",
-//   },
-//   price: {},
-//   image: { width: "100%", aspectRatio: 1 },
-// });
