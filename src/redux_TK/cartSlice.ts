@@ -8,7 +8,7 @@ export type CartItem = {
   imageUrl: string;
   type?: string;
   size?: number;
-  count?: number;
+  count: number;
 };
 
 interface CartSliceState {
@@ -26,16 +26,33 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<CartItem>) => {
-      state.items = [...state.items, action.payload];
-      state.totalPrice += action.payload.price;
-    },
-    removeItem: (state, action: PayloadAction<CartItem>) => {
       const itemIndex = state.items.findIndex(
         (item) => item.id === action.payload.id
       );
+
       if (itemIndex !== -1) {
-        state.totalPrice -= state.items[itemIndex].price;
-        state.items.splice(itemIndex, 1);
+        // Товар уже есть в корзине, увеличиваем count на 1
+        state.items[itemIndex].count = (state.items[itemIndex]?.count || 0) + 1;
+      } else {
+        // Товара нет в корзине, добавляем его
+        state.items.push(action.payload);
+      }
+
+      state.totalPrice += action.payload.price;
+    },
+    removeItem: (state, action: PayloadAction<string>) => {
+      const itemIndex = state.items.findIndex(
+        (item) => item.id === action.payload
+      );
+      if (itemIndex !== -1) {
+        const item = state.items[itemIndex];
+        if (item?.count > 1) {
+          item.count--;
+          state.totalPrice -= item.price;
+        } else {
+          state.totalPrice -= item.price;
+          state.items.splice(itemIndex, 1);
+        }
       }
     },
     clearCart: (state) => {

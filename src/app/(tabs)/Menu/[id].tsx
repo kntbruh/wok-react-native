@@ -1,7 +1,7 @@
 import {
   View,
   Text,
-  Alert,
+  ScrollView,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'blue',
   },
-  description: { paddingVertical: 5, fontSize: 16, color: 'yellow' },
+  description: { paddingBottom: 5, fontSize: 14, color: 'green' },
   price: {
     color: 'green',
     fontSize: 20,
