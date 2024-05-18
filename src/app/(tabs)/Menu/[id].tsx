@@ -14,7 +14,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { fetchWoks, selectWok } from '@/redux_TK/wokSlice';
 import { useAppDispatch } from '@/redux_TK/store';
 import { useSelector } from 'react-redux';
-import { addItem } from '@/redux_TK/cartSlice';
+import { CartItem, addItem } from '@/redux_TK/cartSlice';
 
 const wokItemInfo = () => {
   const { id } = useLocalSearchParams();
@@ -32,31 +32,26 @@ const wokItemInfo = () => {
   }
 
   const woks = items.find((w) => w.id.toString() === id);
+  if (!woks) {
+    return <Text>Product not found</Text>;
+  }
   const handleAppCart = () => {
-    dispatch(
-      addItem({
-        ...woks,
-      })
-    );
+    if (woks) {
+      const item: CartItem = {
+        id: woks.id.toString(),
+        title: woks.title,
+        price: woks.price,
+        imageUrl: woks.imageUrl,
+        count: 1,
+      };
+      dispatch(addItem(item));
+    }
   };
 
   const handleSizeSelect = (size: number) => {
     setSelectedSize(size);
   };
-  const onHandleAdd = () => {
-    if (!woks) {
-      return;
-    }
 
-    const item = {
-      id: woks.id,
-      title: woks.title,
-      imageUrl: woks.imageUrl,
-      price: woks.price,
-      count: 1,
-    };
-    dispatch(addItem(item));
-  };
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: woks?.title }} />
