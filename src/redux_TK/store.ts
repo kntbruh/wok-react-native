@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import wokReducer from "./wokSlice";
+import cartReducer from "./cartSlice";
 import { useDispatch } from "react-redux";
 
 export const store = configureStore({
   reducer: {
     wok: wokReducer,
+    cart: cartReducer,
   },
 });
 

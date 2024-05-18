@@ -5,15 +5,16 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-} from "react-native";
-import React from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import Button from "@/components/myComponents/Button";
-import { AntDesign } from "@expo/vector-icons";
-import { fetchWoks, selectWok } from "@/redux_TK/wokSlice";
-import { useAppDispatch } from "@/redux_TK/store";
-import { useSelector } from "react-redux";
+} from 'react-native';
+import React from 'react';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import Button from '@/components/myComponents/Button';
+import { AntDesign } from '@expo/vector-icons';
+import { fetchWoks, selectWok } from '@/redux_TK/wokSlice';
+import { useAppDispatch } from '@/redux_TK/store';
+import { useSelector } from 'react-redux';
+import { addItem } from '@/redux_TK/cartSlice';
 
 const wokItemInfo = () => {
   const { id } = useLocalSearchParams();
@@ -26,14 +27,35 @@ const wokItemInfo = () => {
     dispatch(fetchWoks({}));
   }, [dispatch]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <Text>Loading...</Text>;
   }
 
   const woks = items.find((w) => w.id.toString() === id);
+  const handleAppCart = () => {
+    dispatch(
+      addItem({
+        ...woks,
+      })
+    );
+  };
 
   const handleSizeSelect = (size: number) => {
     setSelectedSize(size);
+  };
+  const onHandleAdd = () => {
+    if (!woks) {
+      return;
+    }
+
+    const item = {
+      id: woks.id,
+      title: woks.title,
+      imageUrl: woks.imageUrl,
+      price: woks.price,
+      count: 1,
+    };
+    dispatch(addItem(item));
   };
   return (
     <View style={styles.container}>
@@ -41,7 +63,7 @@ const wokItemInfo = () => {
       <Image style={styles.image} source={{ uri: woks?.imageUrl }} />
       <View style={styles.infoContainer}>
         <Text style={styles.description}>{woks?.description}</Text>
-        <Text style={styles.price}>Цена: {woks?.price + "₽"}</Text>
+        <Text style={styles.price}>Цена: {woks?.price + '₽'}</Text>
       </View>
       <View style={styles.sizeContainer}>
         {woks?.sizes.map((size: number, index: number) => (
@@ -51,7 +73,7 @@ const wokItemInfo = () => {
             style={[
               styles.size,
               {
-                backgroundColor: selectedSize === size ? "lightgray" : "white",
+                backgroundColor: selectedSize === size ? 'lightgray' : 'white',
               },
             ]}
           >
@@ -60,10 +82,10 @@ const wokItemInfo = () => {
         ))}
         <View style={styles.ratingView}>
           <Text style={styles.rating}>{woks?.rating}</Text>
-          <AntDesign name="star" size={24} color="yellow" />
+          <AntDesign name='star' size={24} color='yellow' />
         </View>
       </View>
-      <Button text="Добавить в корзину" />
+      <Button text='Добавить в корзину' onPress={handleAppCart} />
     </View>
   );
 };
@@ -77,27 +99,27 @@ const styles = StyleSheet.create({
   infoContainer: { paddingVertical: 5 },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "blue",
+    fontWeight: 'bold',
+    color: 'blue',
   },
-  description: { paddingVertical: 5, fontSize: 16, color: "yellow" },
+  description: { paddingVertical: 5, fontSize: 16, color: 'yellow' },
   price: {
-    color: "green",
+    color: 'green',
     fontSize: 20,
   },
-  image: { width: "100%", height: "50%" },
-  sizeContainer: { gap: 10, flexDirection: "row", padding: 10 },
+  image: { width: '100%', height: '50%' },
+  sizeContainer: { gap: 10, flexDirection: 'row', padding: 10 },
   size: {
-    backgroundColor: "lightgray",
+    backgroundColor: 'lightgray',
     width: 50,
     aspectRatio: 1,
     borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  textSize: { fontSize: 15, fontWeight: "bold" },
-  ratingView: { flexDirection: "row", alignItems: "center" },
-  rating: { fontSize: 20, fontWeight: "bold", color: "yellow" },
+  textSize: { fontSize: 15, fontWeight: 'bold' },
+  ratingView: { flexDirection: 'row', alignItems: 'center' },
+  rating: { fontSize: 20, fontWeight: 'bold', color: 'yellow' },
 });
 
 export default wokItemInfo;
